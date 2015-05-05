@@ -24,7 +24,25 @@ file(GLOB cityscape_builder_src)
 
 # Executable
 add_executable(cityscape_builder ${cityscape_builder_src}
-main.h main.cpp)
+main.cpp
+ARTagNode.h
+ARTagNode.cpp
+CalibrationParameters.h
+CalibrationParameters.cpp
+GeometryTypes.h
+GeometryTypes.cpp
+GLSL_ShaderLoader.h
+GLSL_ShaderLoader.cpp
+Marker.h
+Marker.cpp
+MarkerDetector.h
+MarkerDetector.cpp
+SkyscraperAssetLoader.h
+SkyscraperAssetLoader.cpp
+VideoRenderer.h
+VideoRenderer.cpp
+VideoTexCallback.h
+VideoTexCallback.cpp)
 
 # Link paths
 link_directories(${OPENSCENEGRAPH_LIBRARY_DIR})
