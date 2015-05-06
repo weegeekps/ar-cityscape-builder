@@ -22,6 +22,8 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 # Source Files
 file(GLOB cityscape_builder_src)
 
+#add_definitions(-DDEBUG_BOXES)
+
 # Executable
 add_executable(cityscape_builder ${cityscape_builder_src}
 main.cpp

@@ -5,6 +5,9 @@
 #include "CalibrationParameters.h"
 
 CalibrationParameters::CalibrationParameters(std::string parameterFilePath) {
+    this->intrincsicMatrix = cv::Mat::zeros(3, 3, CV_32F);
+    this->distCoeffs = cv::Mat::zeros(1, 5, CV_32F);
+
     cv::FileStorage fs(parameterFilePath, cv::FileStorage::READ);
 
     fs["intrinsic_matrix"] >> intrincsicMatrix;

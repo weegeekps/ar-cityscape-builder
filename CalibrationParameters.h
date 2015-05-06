@@ -11,8 +11,8 @@
 
 class CalibrationParameters {
 public:
-    cv::Mat intrincsicMatrix = cv::Mat::zeros(3, 3, CV_32F);
-    cv::Mat distCoeffs = cv::Mat::zeros(1, 5, CV_32F);
+    cv::Mat intrincsicMatrix;
+    cv::Mat distCoeffs;
 
     CalibrationParameters(std::string parameterFilePath);
     ~CalibrationParameters();

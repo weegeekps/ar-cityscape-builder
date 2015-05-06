@@ -16,7 +16,6 @@
 
 // OSG Includes
 #include <osg/Group>
-#include <osg/Node>
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgGA/TrackballManipulator>
@@ -24,7 +23,6 @@
 // Application Includes
 #include "ARTagNode.h"
 #include "CalibrationParameters.h"
-#include "Marker.h"
 #include "MarkerDetector.h"
 #include "VideoRenderer.h"
 #include "SkyscraperAssetLoader.h"
@@ -101,7 +99,7 @@ int main(int argc, const char *argv[]) {
     nodeTransform->setMatrix(osg::Matrix::identity());
 
     osg::Matrix moveDown;
-    moveDown.makeTranslate(0.0, 20.0, 0.0);
+    moveDown.makeTranslate(0.0, 13.0, 0.0);
 
     osg::Matrix rotate90;
     rotate90.makeRotate(
@@ -122,7 +120,7 @@ int main(int argc, const char *argv[]) {
     scaleTag213 = scaleTag213 * moveDown;
 
     osg::Matrix translateTag260;
-    translateTag260.makeTranslate(-130.0, -50.0, 0.0);
+    translateTag260.makeTranslate(-130.0, -25.0, 0.0);
     translateTag260 = translateTag260 * rotate90;
 
     osg::Matrix scaleTag314;
@@ -133,6 +131,22 @@ int main(int argc, const char *argv[]) {
     translateTag314.makeTranslate(-70.0, 0.0, 0.0);
     scaleTag314 = scaleTag314 * translateTag314;
 
+#ifdef DEBUG_BOXES
+    osg::ref_ptr<ARTagNode> arTagNode132 = new ARTagNode(132, detectedMarkers, osg::Matrix::identity());
+    osg::ref_ptr<ARTagNode> arTagNode200 = new ARTagNode(200, detectedMarkers, osg::Matrix::identity());
+    osg::ref_ptr<ARTagNode> arTagNode213 = new ARTagNode(213, detectedMarkers, osg::Matrix::identity());
+    osg::ref_ptr<ARTagNode> arTagNode260 = new ARTagNode(260, detectedMarkers, osg::Matrix::identity());
+    osg::ref_ptr<ARTagNode> arTagNode314 = new ARTagNode(314, detectedMarkers, osg::Matrix::identity());
+    osg::ref_ptr<ARTagNode> arTagNode480 = new ARTagNode(480, detectedMarkers, osg::Matrix::identity());
+
+    SkyscraperAssetLoader assetLoader(rootNode);
+    assetLoader.addAsset(arTagNode132, SkyscraperAssetLoader::createBox(80, osg::Vec4(1.0, 0.0, 0.0, 1.0), osg::Vec3(0.0,-39.0,0.0)));
+    assetLoader.addAsset(arTagNode200, SkyscraperAssetLoader::createBox(80, osg::Vec4(1.0, 0.0, 0.0, 1.0), osg::Vec3(0.0,-39.0,0.0)));
+    assetLoader.addAsset(arTagNode213, SkyscraperAssetLoader::createBox(80, osg::Vec4(1.0, 0.0, 0.0, 1.0), osg::Vec3(0.0,-39.0,0.0)));
+    assetLoader.addAsset(arTagNode260, SkyscraperAssetLoader::createBox(80, osg::Vec4(1.0, 0.0, 0.0, 1.0), osg::Vec3(0.0,-39.0,0.0)));
+    assetLoader.addAsset(arTagNode314, SkyscraperAssetLoader::createBox(80, osg::Vec4(1.0, 0.0, 0.0, 1.0), osg::Vec3(0.0,-39.0,0.0)));
+    assetLoader.addAsset(arTagNode480, SkyscraperAssetLoader::createBox(80, osg::Vec4(1.0, 0.0, 0.0, 1.0), osg::Vec3(0.0,-39.0,0.0)));
+#else
     osg::ref_ptr<ARTagNode> arTagNode132 = new ARTagNode(132, detectedMarkers, rotate90);
     osg::ref_ptr<ARTagNode> arTagNode200 = new ARTagNode(200, detectedMarkers, scaleTag200);
     osg::ref_ptr<ARTagNode> arTagNode213 = new ARTagNode(213, detectedMarkers, scaleTag213);
@@ -147,16 +161,17 @@ int main(int argc, const char *argv[]) {
     assetLoader.addAsset(arTagNode260, "models/apartman_2.obj");
     assetLoader.addAsset(arTagNode314, "models/building_2.3ds");
     assetLoader.addAsset(arTagNode480, "models/Godzilla.obj");
+#endif
 
     // physical size of the sensor.
-    double apertureWidth = 0.5;
-    double apertureHeight = 0.5;
+    double apertureWidth = 1.0;
+    double apertureHeight = 1.0;
     double fovx, fovy, focalLength, aspectRatio;
     Point2d principalPoint;
     cv::calibrationMatrixValues(calibrationParameters.intrincsicMatrix, size, apertureWidth, apertureHeight, fovx, fovy, focalLength, principalPoint, aspectRatio);
 
     osg::Matrixd projectionmatrix;
-    projectionmatrix.makePerspective(fovy, fovx/fovy, 0.1, 1000.0);
+    projectionmatrix.makePerspective(fovy, aspectRatio, 0.1, 1000.0);
 
     osgViewer::Viewer* viewer = new osgViewer::Viewer();
     viewer->setSceneData(rootNode);
